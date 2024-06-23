@@ -1,0 +1,14 @@
+<!--
+This launch file is to load a sample trajectory from sample_trajectories/ folder as a param to the robot control classnode. 
+
+1. Currently passes individual files as params to control nodes individually, need to implement the Swarm Multi agent 
+trajectory loader
+-->
+<launch>
+    <arg name="path" default="$(find rgc_control)"/>
+    <arg name="filepath" default="saved_policies/ego_traj.eqx"/>
+    <node name="robot_control_node" pkg="rgc_control">
+        <param name="trajectory/base_path" type="string" value="$(arg path)"/>
+        <param name="trajectory/filename" type="string" value="$(arg file)"/>
+    </node>
+</launch>
