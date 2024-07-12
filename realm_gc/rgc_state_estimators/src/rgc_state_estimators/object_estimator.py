@@ -55,8 +55,8 @@ class ObjectStateEstimator(StateEstimator):
 
     def update(self):
         """Update the filter state and publish the new state estimate."""
-        # no filter currently?
-        self.estimate_pub.publish(self.position_msg)
+        if self.position_msg is not None:
+            self.estimate_pub.publish(self.position_msg)
     
     def position_callback(self, msg):
         """
