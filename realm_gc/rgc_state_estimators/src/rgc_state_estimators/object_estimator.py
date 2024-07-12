@@ -30,12 +30,7 @@ class ObjectStateEstimator(StateEstimator):
             "~position_topic", f"/vicon/{self.user_id}/{self.user_id}"
         )
 
-        # Publisher - to be defined in subclasses, as needed
-        # e.g., self.pub = rospy.Publisher(
-        #           f"{rospy.get_name()}/estimate",
-        #           PoseStamped,
-        #           queue_size=10
-        #       )
+        # Publisher
         self.estimate_pub = rospy.Publisher(
             f"{rospy.get_name()}/estimate", TransformStamped, queue_size=10
         )
@@ -45,8 +40,8 @@ class ObjectStateEstimator(StateEstimator):
             f"{rospy.get_name()}/reset", Empty, self.reset_state
         )
 
-        # Other subscribers - to be defined in subclasses, as needed
-        # e.g., rospy.Subscriber("input_topic", MessageType, self.callback_method)
+        # Other subscribers
+        self.position_msg = None
         self.position_sub = rospy.Subscriber(
             self.position_topic, TransformStamped, self.position_callback
         )
