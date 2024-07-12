@@ -26,6 +26,10 @@ class ObjectStateEstimator(StateEstimator):
         self.dt = 1.0 / self.rate
         self.rate_timer = rospy.Rate(self.rate)
 
+        self.position_topic = rospy.get_param(
+            "~position_topic", f"/vicon/{self.user_id}/{self.user_id}"
+        )
+
         # Publisher - to be defined in subclasses, as needed
         # e.g., self.pub = rospy.Publisher(
         #           f"{rospy.get_name()}/estimate",
@@ -49,11 +53,6 @@ class ObjectStateEstimator(StateEstimator):
 
         # Initialize the state
         self.reset_state()
-
-        # Fetch additional parameters
-        self.position_topic = rospy.get_param(
-            "~position_topic", f"/vicon/{self.user_id}/{self.user_id}"
-        )
         
     def reset_state(self, msg=None):
         """Reset the state of the estimator."""
@@ -63,7 +62,6 @@ class ObjectStateEstimator(StateEstimator):
         """Update the filter state and publish the new state estimate."""
         # no filter currently?
         self.estimate_pub.publish(self.position_msg)
-        return
     
     def position_callback(self, msg):
         """
@@ -79,4 +77,3 @@ if __name__ == "__main__":
         ose_node.run()
     except rospy.ROSInterruptException:
         pass
-
