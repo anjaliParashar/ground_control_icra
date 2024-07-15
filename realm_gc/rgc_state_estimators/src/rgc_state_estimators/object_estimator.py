@@ -27,7 +27,7 @@ class ObjectStateEstimator(StateEstimator):
         self.rate_timer = rospy.Rate(self.rate)
 
         self.position_topic = rospy.get_param(
-            "~position_topic", f"/vicon/{self.user_id}/{self.user_id}"
+            "~surrounding_position_topic", f"/vicon/{self.user_id}/{self.user_id}"
         )
 
         # Publisher

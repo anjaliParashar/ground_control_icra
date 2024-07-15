@@ -1,0 +1,37 @@
+<!-- This launch file starts the controller and state estimator for the F1Tenth platform -->
+
+<launch>
+    <arg name="base_path" default="$(find rgc_control)/saved_policies"/>
+    <arg name="traj_filepath" default="base/ego_traj.eqx"/>
+    <arg name="mlp_filepath" default="base/mlp.eqx"/>
+
+    <arg name="T" default="12"/>
+
+    <arg name="position_topic" default="/vicon/realm_f1tenth/realm_f1tenth"/>
+    <arg name="user_id" default="realm_turtle_1"/>
+    
+    <!-- State estimator -->
+    <node name="f1tenth_state_estimator" pkg="rgc_state_estimators" type="f1tenth_ekf.py" output="screen">
+        <param name="position_topic" type="string" value="$(arg position_topic)"/>
+    </node>
+
+    <!-- Surrounding State estimator -->
+    <node name="object_state_estimator" pkg="rgc_state_estimators" type="object_estimator.py" output="screen">
+        <!-- <param name="surrounding_position_topic" type="string" value=""/> -->
+        <param name="user_id" type="string" value="$(arg user_id)"/>
+    </node>
+
+    <!-- Controller -->
+    <node name="f1tenth_controller" pkg="rgc_control" type="f1tenth_surrounding.py" output="screen">
+        <!-- state estimator topic name, surrounding user id-->
+        <param name="state_estimate_topic" type="string" value="f1tenth_state_estimator/estimate"/>
+        <param name = "user_id" type="string" value="$(arg user_id)"/>
+
+        <!-- Set experiment time -->
+        <param name="T" type="double" value="$(arg T)"/>
+
+        <!-- Info on where to find the saved trajectory file -->
+        <param name="trajectory/base_path" type="string" value="$(arg base_path)"/>
+        <param name="trajectory/filename" type="string" value="$(arg traj_filepath)"/>
+    </node>
+</launch>
